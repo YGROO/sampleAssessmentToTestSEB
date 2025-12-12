@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Harry Potter Trivia Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .options button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+        #timer {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #ff0000;
+        }
+        #score {
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Harry Potter Trivia Quiz</h1>
+<div id="quiz-container">
+    <div id="timer">Time left: 45s</div>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+</div>
+<div id="score-container" style="display:none;">
+    <h2>Quiz Completed!</h2>
+    <div id="score"></div>
+</div>
+
+<script>
+const questions = [
+    {q: "What house is Harry Potter in?", options: ["Gryffindor","Slytherin","Hufflepuff","Ravenclaw"], answer: "Gryffindor"},
+    {q: "Who is Harry's godfather?", options: ["Sirius Black","Severus Snape","Remus Lupin","Albus Dumbledore"], answer: "Sirius Black"},
+    {q: "What position does Harry play in Quidditch?", options: ["Seeker","Chaser","Beater","Keeper"], answer: "Seeker"},
+    {q: "Who is the headmaster of Hogwarts?", options: ["Albus Dumbledore","Minerva McGonagall","Severus Snape","Gilderoy Lockhart"], answer: "Albus Dumbledore"},
+    {q: "What is the name of Harry's owl?", options: ["Hedwig","Errol","Pigwidgeon","Crookshanks"], answer: "Hedwig"},
+    {q: "Which creature guards the Philosopher's Stone?", options: ["Fluffy","Basilisk","Troll","Dementor"], answer: "Fluffy"},
+    {q: "Who teaches Potions at Hogwarts?", options: ["Severus Snape","Horace Slughorn","Gilderoy Lockhart","Remus Lupin"], answer: "Severus Snape"},
+    {q: "Which spell is used to unlock doors?", options: ["Alohomora","Expelliarmus","Wingardium Leviosa","Lumos"], answer: "Alohomora"},
+    {q: "Who kills Dumbledore?", options: ["Severus Snape","Bellatrix Lestrange","Voldemort","Draco Malfoy"], answer: "Severus Snape"},
+    {q: "What shape is Harry's scar?", options: ["Lightning bolt","Star","Circle","Square"], answer: "Lightning bolt"},
+    {q: "Who is the Half-Blood Prince?", options: ["Severus Snape","Harry Potter","Tom Riddle","Draco Malfoy"], answer: "Severus Snape"},
+    {q: "Who founded Gryffindor house?", options: ["Godric Gryffindor","Salazar Slytherin","Helga Hufflepuff","Rowena Ravenclaw"], answer: "Godric Gryffindor"},
+    {q: "Which dragon does Harry face in the Triwizard Tournament?", options: ["Hungarian Horntail","Norwegian Ridgeback","Chinese Fireball","Swedish Short-Snout"], answer: "Hungarian Horntail"},
+    {q: "What position does Ron Weasley play in Quidditch?", options: ["Keeper","Seeker","Chaser","Beater"], answer: "Keeper"},
+    {q: "Which house is known for cleverness?", options: ["Ravenclaw","Slytherin","Gryffindor","Hufflepuff"], answer: "Ravenclaw"},
+    {q: "What is the name of Hagrid's pet dragon?", options: ["Norbert","Fluffy","Buckbeak","Aragog"], answer: "Norbert"},
+    {q: "Who is the author of Fantastic Beasts?", options: ["Newt Scamander","J.K. Rowling","Gilderoy Lockhart","Bathilda Bagshot"], answer: "Newt Scamander"},
+    {q: "Who is the youngest Weasley sibling?", options: ["Ginny","Ron","Fred","George"], answer: "Ginny"},
+    {q: "Which magical object shows your deepest desire?", options: ["Mirror of Erised","Time-Turner","Pensieve","Invisibility Cloak"], answer: "Mirror of Erised"},
+    {q: "What creature does Dumbledore leave for Harry in his will?", options: ["Fawkes","Hedwig","Buckbeak","Norbert"], answer: "Fawkes"}
+];
+
+let currentQuestion = 0;
+let score = 0;
+let timeLeft = 45;
+let timer;
+
+function showQuestion() {
+    if(currentQuestion >= questions.length) {
+        document.getElementById('quiz-container').style.display = 'none';
+        document.getElementById('score-container').style.display = 'block';
+        document.getElementById('score').innerText = `Your Score: ${score} / ${questions.length}`;
+        clearInterval(timer);
+        return;
+    }
+    
+    const q = questions[currentQuestion];
+    document.getElementById('question').innerText = q.q;
+    const optionsDiv = document.getElementById('options');
+    optionsDiv.innerHTML = '';
+    q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.innerText = option;
+        btn.onclick = () => {
+            if(option === q.answer) score++;
+            nextQuestion();
+        };
+        optionsDiv.appendChild(btn);
+    });
+
+    timeLeft = 45;
+    document.getElementById('timer').innerText = `Time left: ${timeLeft}s`;
+    clearInterval(timer);
+    timer = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').innerText = `Time left: ${timeLeft}s`;
+        if(timeLeft <= 0) {
+            nextQuestion();
+        }
+    }, 1000);
+}
+
+function nextQuestion() {
+    clearInterval(timer);
+    currentQuestion++;
+    showQuestion();
+}
+
+// Start the quiz
+showQuestion();
+</script>
+
+</body>
+</html>
